@@ -21,7 +21,10 @@ switch ($method) {
             break;
 
         case 'PUT':
-            
+            $data = json_decode(file_get_contents('php://input', true));
+            $updateProduct = $productoDAO->updateProduct($data->id, $data->nombre, $data->descripcion);
+            echo $updateProduct;
+            break;
 
         case 'DELETE':
             $path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';

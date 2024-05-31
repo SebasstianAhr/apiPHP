@@ -74,6 +74,60 @@ class ProductoDAO
         }
     }
 
+    public function updateProduct(int $id, string $nombre, string $descripcion){
+        try {
+
+            $instancia = new Connection('localhost', 'root', '', 'api');
+            $conexion = $instancia->conectar();
+            $query = $conexion->prepare("UPDATE productos SET nombre=?, descripcion=? WHERE id = ?");
+            $query->bindParam(1, $nombre);
+            $query->bindParam(2, $descripcion);
+            $query->bindParam(3, $id);
+
+            $query->execute(); 
+
+            if ($query->rowCount() > 0) {
+                http_response_code(200);
+                return "Producto actualizado exitosamente";
+            } else {
+                http_response_code(400);
+                return "Ningun campo se ha sido actualizado";
+            }
+
+            $instancia->desconectar();
+
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo "Error al actualizar producto: {$e->getMessage()}";
+        }
+    }
+
+    public function productById(int $id){
+        try {
+            
+            $instancia = new Connection('localhost', 'root', '', 'api');
+            $conexion = $instancia->conectar();
+            $query = $conexion->prepare("SELECT * FROM productos WHERE id = ?");
+            $query->bindParam(1, $id);
+            $query->execute();
+            $producto = $query->fetch(PDO::FETCH_ASSOC);
+
+            if ($producto) {
+                http_response_code(200);
+                return $producto;
+            } else {
+                http_response_code(400);
+                return 'El producto con id: '.$id.' no existe.';
+            }
+
+            $instancia->desconectar();
+
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo "Error al encontrar el producto: {$e->getMessage()}";
+        }
+    }
+
     
 }
 
