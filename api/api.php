@@ -21,12 +21,16 @@ switch ($method) {
             break;
 
         case 'PUT':
-            // obteniendo data
-            echo 'edicion de registros PUT';
-            break;
+            
 
         case 'DELETE':
-            echo 'borrado de registros DELETE';
+            $path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
+            $buscarId = explode('/', $path);
+            $id = $buscarId != '/' ? end($buscarId) : null;
+
+            
+            $deleteProduct = $productoDAO->eliminar($id);
+            echo $deleteProduct;
             break;
         
         default:

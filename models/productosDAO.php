@@ -50,6 +50,30 @@ class ProductoDAO
         }
     }
 
+    public function eliminar(int $id){
+        try {
+
+            $instancia = new Connection('localhost','root', '', 'api');
+            $conexion = $instancia->conectar();
+            $query = $conexion->prepare("DELETE FROM productos WHERE id = $id");
+            $query->execute();
+
+            if ($query->rowCount() > 0) {
+                http_response_code(200);
+                return "Producto eliminado exitosamente!";
+            } else {
+                http_response_code(400);
+                return "Ningun campo se ha sido eliminado.";
+            }
+
+            $instancia->desconectar();
+
+        } catch(PDOException $e){
+            http_response_code(500);
+            echo "Error al eliminar producto: {$e->getMessage()}";
+        }
+    }
+
     
 }
 
