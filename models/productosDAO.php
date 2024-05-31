@@ -33,6 +33,23 @@ class ProductoDAO
         }
     }
 
+    public function insertar(string $nombre, string $descripcion){
+        try {
+    
+            $instancia = new Connection('localhost', 'root', '', 'api');
+            $conexion = $instancia->conectar();
+            $query = $conexion->prepare("INSERT INTO productos(nombre, descripcion) VALUES ('$nombre', '$descripcion')");
+            $query->execute();
+    
+            http_response_code(200);
+            return "Producto agregado con exito!";
+            $instancia->desconectar();
+    
+        } catch (PDOException $e) {
+            echo "Error al agregar producto: {$e->getMessage()}";
+        }
+    }
+
     
 }
 

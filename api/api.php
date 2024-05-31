@@ -15,8 +15,9 @@ switch ($method) {
         
         break;
         case 'POST':
-            // obteniendo data
-            echo 'consulta de regostros POST';
+            $data = json_decode(file_get_contents('php://input', true));
+            $producto = $productoDAO->insertar($data->nombre, $data->descripcion);
+            echo $producto;
             break;
 
         case 'PUT':
